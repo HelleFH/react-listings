@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import ListingCard from '../components/ListingCard';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import { API_URL } from '../utils/constants';
-import { truncateDescription, handleDeleteListing } from '../store/appStore';
+import { truncateDescription } from '../store/appStore';
+import { handleDeleteListing } from '../store/appStore'; // Import the handleDeleteListing function
 
 function ShowListingList() {
   const [combinedListings, setCombinedListings] = useState([]);
@@ -36,26 +37,7 @@ function ShowListingList() {
   const renderError = () => (
     <div className='alert alert-danger'>{error || 'An unexpected error occurred.'}</div>
   );
-  const handleDeleteListing = async (listingId) => {
-    try {
-      // Delete the listing on the server
-      const response = await axios.delete(`${API_URL}/listings/${listingId}`);
-    
-      if (response.status === 200) {
-        console.log('Listing deleted successfully:', response.data);
 
-        // Remove the deleted listing from the combinedListings state
-
-        setCombinedListings(combinedListings.filter(listing => listing._id !== listingId));
-        setShowDeleteModal(false); 
-      } else {
-        console.error('Failed to delete listing');
-      }
-    } catch (error) {
-      console.error('Error deleting listing:', error);
-    }
-  };
-  
   const openDeleteModal = (listingId) => {
     setSelectedListingId(listingId);
     setShowDeleteModal(true);
@@ -98,13 +80,14 @@ function ShowListingList() {
           </div>
         )}
       </div>
-<DeleteConfirmationModal
+      <DeleteConfirmationModal
   isOpen={showDeleteModal}
   onCancel={closeDeleteModal}
   onConfirm={() => {
-    handleDeleteListing(selectedListingId);
+    handleDeleteListing(selectedListingId, setCombinedListings, setShowDeleteModal); 
   }}
 />
+
     </div>
   );
 }

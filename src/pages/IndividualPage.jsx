@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { fetchCombinedListings, deleteListing } from '../store/appStore';
+import { fetchCombinedListings, handleDeleteListing as deleteListingFromStore } from '../store/appStore'; 
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import ListingCard from '../components/ListingCard';
 
@@ -23,7 +23,7 @@ const IndividualPage = () => {
   };
 
   const handleDeleteListing = async () => {
-    await deleteListing(singleListing._id, setCombinedListings, navigate, setShowDeleteModal);
+    await deleteListingFromStore(singleListing._id, setCombinedListings, navigate, setShowDeleteModal); // Use the imported function
     closeDeleteModal();
   };
 

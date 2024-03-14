@@ -1,39 +1,12 @@
+// UpdateListingInfo.js
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import ImageUpload from '../components/imageUpload';
-import { fetchListingInfo, updateListingInfo } from '../store/appStore';
+import { fetchListingInfo, handleSubmit, onChange, deleteCloudinaryImage, handleDeleteListing } from '../store/appStore'; // Import necessary functions from appStore.js
 import axios from 'axios';
 import { API_URL } from '../utils/constants';
 
-// Function to delete Cloudinary image
-const deleteCloudinaryImage = async (publicIdToDelete) => {
-  try {
-    if (publicIdToDelete) {
-      const response = await axios.delete(`${API_URL}/delete-image/${publicIdToDelete}`);
-      console.log('Cloudinary image deletion response:', response.data);
-    }
-  } catch (error) {
-    console.error('Error deleting image from Cloudinary:', error);
-    // Handle error if needed
-  }
-};
-const handleDeleteListing = async (listingId) => {
-  try {
-    // Delete the listing on the server
-    const response = await axios.delete(`${API_URL}/listings/${listingId}`);
-
-    if (response.status === 200) {
-      console.log('Listing deleted successfully:', response.data);
-      return true; 
-    } else {
-      console.error('Failed to delete listing');
-      return false; 
-    }
-  } catch (error) {
-    console.error('Error deleting listing:', error);
-    throw error; 
-  }
-};
 function UpdateListingInfo() {
   const dropRef = useRef();
   const [file, setFile] = useState(null);
@@ -50,9 +23,24 @@ function UpdateListingInfo() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchListingInfo(id, setListing, setPreviewSrc);
+    const fetchData = async () => {
+      try {
+        const data = await fetchListingInfo(id);
+        if (data) {
+          setListing(data); // Update the listing state with the fetched data
+          setPreviewSrc(data.cloudinaryUrl); // Set the preview source with the fetched cloudinaryUrl
+        } else {
+          console.error('Listing data is undefined');
+          // Handle the case where the listing data is undefined
+        }
+      } catch (error) {
+        console.error('Error fetching listing information:', error);
+        // Handle error if needed
+      }
+    };
+  
+    fetchData();
   }, [id]);
-
   const onDrop = (acceptedFiles) => {
     const currentFile = acceptedFiles[0];
     setFile(currentFile);
@@ -65,83 +53,22 @@ function UpdateListingInfo() {
     reader.readAsDataURL(currentFile);
   };
 
-  const onChange = (e) => {
-    setListing({ ...listing, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    onChange(e, listing, setListing); // Handle change in input fields
   };
-  
-  const onSubmit = async (e) => {
+
+  const handleSubmitForm = async (e) => {
     e.preventDefault();
-  
-    try {
-      let oldListingId;
-  
-      if (file && listing.cloudinaryUrl) {
-        // Extract the public ID from the existing cloudinaryUrl
-        const publicIdToDelete = listing.cloudinaryUrl.split('/').pop().split('.')[0];
-        console.log('Public ID to delete:', publicIdToDelete);
-  
-        // Delete the old image from Cloudinary
-        await deleteCloudinaryImage(publicIdToDelete);
-  
-        const formData = new FormData();
-        formData.append('file', file);
-  
-        formData.append('title', listing.title);
-        formData.append('description', listing.description);
-        formData.append('location', listing.location);
-  
-        // Upload the new image
-        const uploadResponse = await axios.post(`${API_URL}/upload`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-  
-        const data = {
-          title: listing.title,
-          description: listing.description,
-          location: listing.location,
-          cloudinaryUrl: uploadResponse.data.cloudinaryUrl,
-        };
-  
-        console.log('Data being sent for update:', data);
-  
-        // Update the listing with the new data
-        const updateResponse = await axios.put(`${API_URL}/listings/${id}`, data);
-  
-        console.log('Listing updated successfully:', updateResponse.data);
-  
-        // Retrieve the old listing's ID
-        oldListingId = id;
-      } else {
-        // If no new file is selected, only update title, description, and location
-        const data = {
-          title: listing.title,
-          description: listing.description,
-          location: listing.location,
-          cloudinaryUrl: listing.cloudinaryUrl, // Include the existing cloudinaryUrl
-        };
-      
-        console.log('Data being sent for update:', data);
-      
-        // Update the listing with the existing data
-        const updateResponse = await axios.put(`${API_URL}/listings/${id}`, data);
-      
-        // Handle the update response as needed
-        console.log('Listing updated successfully:', updateResponse.data);
-      }
-  
-      // Delete the old listing if a new image was uploaded
-      if (oldListingId) {
-        await handleDeleteListing(oldListingId);
-      }
-  
-      navigate('/');
-    } catch (error) {
-      console.error('Error updating or deleting listing:', error);
-    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('title', listing.title);
+    formData.append('description', listing.description);
+    formData.append('location', listing.location);
+
+    await handleSubmit(id, formData, file, listing, setFile, setPreviewSrc, navigate); // Submit the form data
   };
-  
+
   return (
     <div className='UpdateListingInfo'>
       <div className='container'>
@@ -149,7 +76,7 @@ function UpdateListingInfo() {
           <div className='col-md-8 m-auto'>
             <br />
             <Link to='/' className='btn btn-outline-warning float-left'>
-            Back to Listings 
+              Back to Listings
             </Link>
           </div>
           <div className='col-md-8 m-auto'>
@@ -159,7 +86,7 @@ function UpdateListingInfo() {
         </div>
 
         <div className='col-md-8 m-auto'>
-          <form noValidate onSubmit={onSubmit}>
+          <form noValidate onSubmit={handleSubmitForm}>
             <ImageUpload
               onDrop={onDrop}
               file={file}
@@ -173,7 +100,7 @@ function UpdateListingInfo() {
                 name='title'
                 className='form-control'
                 value={listing.title}
-                onChange={onChange}
+                onChange={handleChange}
               />
             </div>
 
@@ -186,7 +113,7 @@ function UpdateListingInfo() {
                 name='description'
                 className='form-control'
                 value={listing.description}
-                onChange={onChange}
+                onChange={handleChange}
               />
             </div>
             <br />
@@ -197,12 +124,12 @@ function UpdateListingInfo() {
                 name='location'
                 className='form-control'
                 value={listing.location}
-                onChange={onChange}
+                onChange={handleChange}
               />
             </div>
             <button
               type='submit'
-              className='btn button button--orange btn-lg btn-block float-end mt-4 float-right'
+              className='btn button button--orange btn-lg btn-block float-endmt-4 float-right'
             >
               Update Listing
             </button>
