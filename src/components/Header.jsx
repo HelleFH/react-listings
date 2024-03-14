@@ -11,7 +11,7 @@ const Header = () => {
         </div>
       </div>
       <div className="hidden sm:block">
-        <ul className="d-flex list-unstyled justify-content-between items-center">
+        <ul className=" d-flex flex-row list-unstyled justify-content-between items-center align-items-center mb-0 p-3 ml-2 mr-2">
           <li>
             <NavLink
               to="/"

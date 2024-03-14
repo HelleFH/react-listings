@@ -75,7 +75,6 @@ p {
 
 /* List item styles */
 li:hover {
-  transform: scale(0.99);
   text-decoration: underline;
 }
 li:active {
@@ -85,8 +84,7 @@ li:active {
 
 /* Card image styles */
 .card-img-top {
-  min-width: 300px;
-  max-height: 500px;
+  height: 350px;
   object-fit: cover;
 }
 

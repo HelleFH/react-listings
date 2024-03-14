@@ -10,7 +10,7 @@ const uploadRoutes = require('./routes/uploadRoutes');
 require('./config/db');
 const { Listing } = require('./model/listingModel');
 const cloudinary = require('cloudinary').v2;
-const asyncHandler = require('./middleware/asyncHandler'); // Update with the correct path
+const asyncHandler = require('./middleware/asyncHandler'); 
 
 
 cloudinary.config({
@@ -45,8 +45,6 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('Connected to MongoDB');
 });
-
-// Update a listing by ID
 app.put('/listings/:id', asyncHandler(async (req, res) => {
   const id = req.params.id;
   const { title, description, location, cloudinaryUrl, imagePublicId } = req.body;

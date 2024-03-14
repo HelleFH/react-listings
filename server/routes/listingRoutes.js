@@ -36,7 +36,22 @@ router.put('/listings/:id', async (req, res) => {
       return res.status(404).json({ error: 'Listing not found' });
     }
 
-    // Update the listing fields
+    if (cloudinaryUrl && existingListing.cloudinaryUrl !== cloudinaryUrl) {
+      // Delete the old listing if a new cloudinaryUrl is provided
+      await Listing.findByIdAndDelete(id);
+
+      // Create a new listing with the updated information
+      existingListing = await Listing.create({
+        title,
+        description,
+        location,
+        cloudinaryUrl,
+      });
+
+      return res.json({ message: 'Listing updated successfully', updatedListing: existingListing });
+    }
+
+    // If no new cloudinaryUrl is provided or it's the same, update the existing listing
     existingListing.title = title;
     existingListing.description = description;
     existingListing.location = location;

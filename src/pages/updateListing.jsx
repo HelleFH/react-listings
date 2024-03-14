@@ -114,18 +114,19 @@ function UpdateListingInfo() {
         // Retrieve the old listing's ID
         oldListingId = id;
       } else {
-        // If no new file is selected, only update title and description
+        // If no new file is selected, only update title, description, and location
         const data = {
           title: listing.title,
           description: listing.description,
           location: listing.location,
+          cloudinaryUrl: listing.cloudinaryUrl, // Include the existing cloudinaryUrl
         };
-  
+      
         console.log('Data being sent for update:', data);
-  
+      
         // Update the listing with the existing data
         const updateResponse = await axios.put(`${API_URL}/listings/${id}`, data);
-  
+      
         // Handle the update response as needed
         console.log('Listing updated successfully:', updateResponse.data);
       }
@@ -141,7 +142,6 @@ function UpdateListingInfo() {
     }
   };
   
-  
   return (
     <div className='UpdateListingInfo'>
       <div className='container'>
@@ -149,7 +149,7 @@ function UpdateListingInfo() {
           <div className='col-md-8 m-auto'>
             <br />
             <Link to='/' className='btn btn-outline-warning float-left'>
-              Show Book List
+            Back to Listings 
             </Link>
           </div>
           <div className='col-md-8 m-auto'>
@@ -202,7 +202,7 @@ function UpdateListingInfo() {
             </div>
             <button
               type='submit'
-              className='btn button button--orange btn-lg btn-block float right'
+              className='btn button button--orange btn-lg btn-block float-end mt-4 float-right'
             >
               Update Listing
             </button>

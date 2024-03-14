@@ -3,7 +3,7 @@ import axios from 'axios';
 import localListings from '../data/localListings.json';  // Add this line
 
 
-export const API_URL = 'https://react-listings.onrender.com';
+export const API_URL = 'http://localhost:3030';
 export const CLOUDINARY_CLOUD_NAME = 'dvagswjsf';
 export const CLOUDINARY_API_KEY = '541989745898263';
 export const CLOUDINARY_API_SECRET = 'ppzQEDXFiCcFdicfNYCupeZaRu0';
@@ -24,76 +24,6 @@ export const fetchListingInfo = async (id, setListing, setPreviewSrc) => {
   }
 };
 
-export const updateListingInfo = async (id, listing, file, navigate, setFile) => {
-  try {
-    if (file) {
-      // Extract public ID from the existing cloudinaryUrl
-      const publicId = listing.cloudinaryUrl.split("/").slice(-2, -1)[0];
-
-      // Delete the old image from Cloudinary
-      if (publicId) {
-        const deleteImageResponse = await axios.delete(
-          `${CLOUDINARY_BASE_URL}/resources/image/upload/${publicId}`,
-          {
-            auth: {
-              username: CLOUDINARY_API_KEY,
-              password: CLOUDINARY_API_SECRET,
-            },
-          }
-        );
-        console.log('Old image deleted from Cloudinary:', deleteImageResponse.data);
-      }
-
-      // Upload the new image to Cloudinary
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const uploadResponse = await axios.post(`${CLOUDINARY_BASE_URL}/upload`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        auth: {
-          username: CLOUDINARY_API_KEY,
-          password: CLOUDINARY_API_SECRET,
-        },
-      });
-
-      const data = {
-        title: listing.title,
-        description: listing.description,
-        location: listing.location,
-        cloudinaryUrl: uploadResponse.data.public_id,
-      };
-
-      console.log('Data being sent for update:', data);
-
-      // Update the listing with the new data
-      const updateResponse = await axios.put(`${API_URL}/listings/${id}`, data);
-
-      console.log('Listing updated successfully:', updateResponse.data);
-      navigate('/');
-    } else {
-      // If no new file is selected, only update title, description, and location
-      const data = {
-        title: listing.title,
-        description: listing.description,
-        location: listing.location,
-      };
-
-      console.log('Data being sent for update:', data);
-
-      // Update the listing with the existing data
-      const updateResponse = await axios.put(`${API_URL}/listings/${id}`, data);
-
-      // Handle the update response as needed
-      console.log('Listing updated successfully:', updateResponse.data);
-      navigate('/');
-    }
-
-  } catch (error) {
-    console.error('Error updating or deleting listing:', error);
-  }
-};
 export const uploadListing = async (file, listing, setFile, setPreviewSrc, setIsPreviewAvailable, navigate, setErrorMsg) => {
     try {
       if (!file) {

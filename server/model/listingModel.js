@@ -4,7 +4,7 @@ const listingSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   location: { type: String, required: true },
-  cloudinaryUrl: { type: String, required: true },
+  cloudinaryUrl: { type: String },
   cloudinaryPublicId: { type: String, required: true }, // Store Cloudinary public ID here
   cloudinaryDeleteToken: { type: String, required: true }, // Add Cloudinary delete token field
 });

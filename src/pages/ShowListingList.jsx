@@ -40,17 +40,19 @@ function ShowListingList() {
     try {
       // Delete the listing on the server
       const response = await axios.delete(`${API_URL}/listings/${listingId}`);
-  
+    
       if (response.status === 200) {
         console.log('Listing deleted successfully:', response.data);
-        return true; 
+
+        // Remove the deleted listing from the combinedListings state
+
+        setCombinedListings(combinedListings.filter(listing => listing._id !== listingId));
+        setShowDeleteModal(false); 
       } else {
         console.error('Failed to delete listing');
-        return false; 
       }
     } catch (error) {
       console.error('Error deleting listing:', error);
-      throw error; 
     }
   };
   
@@ -96,14 +98,13 @@ function ShowListingList() {
           </div>
         )}
       </div>
-      <DeleteConfirmationModal
-        isOpen={showDeleteModal}
-        onCancel={closeDeleteModal}
-        onConfirm={() => {
-          handleDeleteListing(selectedListingId, setCombinedListings, setShowDeleteModal);
-          closeDeleteModal();
-        }}
-      />
+<DeleteConfirmationModal
+  isOpen={showDeleteModal}
+  onCancel={closeDeleteModal}
+  onConfirm={() => {
+    handleDeleteListing(selectedListingId);
+  }}
+/>
     </div>
   );
 }

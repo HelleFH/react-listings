@@ -5,12 +5,11 @@ const router = express.Router();
 
 
 
-// Route to delete Cloudinary image
+// Route to delete Cloudinary image when a listing is updated with a new image
 router.delete('/delete-image/:publicId', async (req, res) => {
   try {
     const { publicId } = req.params;
 
-    // Delete the image from Cloudinary
     const result = await cloudinary.uploader.destroy(publicId);
     console.log('Cloudinary deletion result:', result);
 
@@ -21,7 +20,7 @@ router.delete('/delete-image/:publicId', async (req, res) => {
   }
 });
 
-
+// Route to delete a listing
 
 router.delete('/listings/:id', async (req, res) => {
   try {
