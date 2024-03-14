@@ -1,0 +1,9 @@
+const crypto = require('crypto');
+
+// Function to generate a random deletion token
+function generateDeletionToken() {
+  const randomBytes = crypto.randomBytes(16);
+  return randomBytes.toString('hex');
+}
+
+module.exports = { generateDeletionToken };
