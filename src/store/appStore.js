@@ -3,7 +3,7 @@ import axios from 'axios';
 import localListings from '../data/localListings.json';  // Add this line
 
 
-export const API_URL = 'http://localhost:3030';
+export const API_URL = 'https://react-listings.onrender.com';
 export const CLOUDINARY_CLOUD_NAME = 'dvagswjsf';
 export const CLOUDINARY_API_KEY = '541989745898263';
 export const CLOUDINARY_API_SECRET = 'ppzQEDXFiCcFdicfNYCupeZaRu0';
