@@ -26,16 +26,12 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 204,
 };
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(deleteRoutes);
 app.use(listingRoutes);
 app.use(uploadRoutes);
-app.use(express.static(path.join(__dirname, 'build')));
 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
