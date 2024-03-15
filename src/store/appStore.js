@@ -140,7 +140,7 @@ export const handleDeleteListing = async (listingId, setCombinedListings, setSho
 
     // Update combinedListings state by removing the deleted listing
     setCombinedListings((prevListings) => prevListings.filter(listing => listing._id !== listingId));
-
+console.log ({setCombinedListings})
     setShowDeleteModal(false);
 
     console.log('Listing deleted successfully');

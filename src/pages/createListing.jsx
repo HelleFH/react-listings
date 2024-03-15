@@ -45,7 +45,7 @@ const CreateListingWithFileUpload = () => {
   return (
     <>
       <Link to='/'>
-        <button className='button button--blue mt-3 mb-3 float-right'>
+        <button className='button mt-3 mb-3 btn btn-outline-warning float-right'>
           Back to Listings
         </button>
       </Link>

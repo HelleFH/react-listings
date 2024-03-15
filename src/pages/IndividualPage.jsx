@@ -42,7 +42,7 @@ const IndividualPage = () => {
   return (
     <div className="container mt-5">
       <Link to="/">
-        <button className="button button--blue mt-3 mb-3  float-right">Back to Listings</button>
+        <button className="mb-4 btn btn-outline-warning">Back to Listings</button>
       </Link>
       <div className="col-md-12 mx-auto" style={{ maxWidth: '800px' }}>
         <div className="container-lg">
