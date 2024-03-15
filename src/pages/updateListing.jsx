@@ -123,7 +123,7 @@ function UpdateListingInfo() {
             </div>
             <button
               type='submit'
-              className='btn button button--orange btn-lg btn-block float-endmt-4 float-right'
+              className='btn button button--orange btn-lg btn-block float-end mt-4 float-right'
             >
               Update Listing
             </button>
