@@ -5,7 +5,7 @@ import ListingCard from '../components/ListingCard';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import { API_URL } from '../utils/constants';
 import { truncateDescription } from '../store/appStore';
-import { handleDeleteListing } from '../store/appStore'; // Import the handleDeleteListing function
+import { handleDeleteListing } from '../store/appStore'; 
 
 function ShowListingList() {
   const [combinedListings, setCombinedListings] = useState([]);
@@ -21,7 +21,7 @@ function ShowListingList() {
 
         const localListings = require('../data/localListings.json');
 
-        // Combine MongoDB and local listings from data.json
+        // Combine MongoDB and local listings from data.json file
         setCombinedListings([...mongodbListings, ...localListings]);
 
         setError(null);

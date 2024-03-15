@@ -23,7 +23,7 @@ const IndividualPage = () => {
   };
 
   const handleDeleteListing = async () => {
-    await deleteListingFromStore(singleListing._id, setCombinedListings, navigate, setShowDeleteModal); // Use the imported function
+    await deleteListingFromStore(singleListing._id, setCombinedListings, () => navigate('/'), setShowDeleteModal); 
     closeDeleteModal();
   };
 

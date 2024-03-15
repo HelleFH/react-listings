@@ -12,26 +12,30 @@ export const fetchListingInfo = async (id) => {
     return null; 
   }
 };
+
 export const truncateDescription = (description, wordCount) => {
   const words = description.split(' ');
   const truncatedWords = words.slice(0, wordCount);
   return truncatedWords.join(' ') + (words.length > wordCount ? '...' : '');
 };
+
 export const onChange = (e, listing, setListing) => {
   setListing({ ...listing, [e.target.name]: e.target.value });
 };
+
 export const fetchCombinedListings = async (setCombinedListings, setError) => {
   try {
     const response = await axios.get(`${API_URL}/listings`);
     const mongodbListings = response.data;
   
     setCombinedListings([...mongodbListings, ...localListings]);
-    setError(null); // Clear the error if the request is successful
+    setError(null); 
   } catch (error) {
     console.log('Error fetching listings:', error);
     setError('Error fetching listings. Please try again.');
   }
 };
+
 export const uploadListing = async (file, listing, setFile, setPreviewSrc, setIsPreviewAvailable, navigate, setErrorMsg) => {
   try {
     if (!file) {
@@ -117,6 +121,7 @@ export const deleteCloudinaryImage = async (publicIdToDelete) => {
     console.error('Error deleting image from Cloudinary:', error);
   }
 };
+
 export const deleteListing = async (listingId) => {
   try {
     const response = await axios.delete(`${API_URL}/listings/${listingId}`);

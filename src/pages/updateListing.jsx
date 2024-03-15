@@ -1,11 +1,7 @@
-// UpdateListingInfo.js
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import ImageUpload from '../components/imageUpload';
-import { fetchListingInfo, handleSubmit, onChange, deleteCloudinaryImage, handleDeleteListing } from '../store/appStore'; // Import necessary functions from appStore.js
-import axios from 'axios';
-import { API_URL } from '../utils/constants';
+import { fetchListingInfo, handleSubmit, onChange, } from '../store/appStore'; 
 
 function UpdateListingInfo() {
   const dropRef = useRef();
@@ -31,11 +27,9 @@ function UpdateListingInfo() {
           setPreviewSrc(data.cloudinaryUrl); // Set the preview source with the fetched cloudinaryUrl
         } else {
           console.error('Listing data is undefined');
-          // Handle the case where the listing data is undefined
         }
       } catch (error) {
         console.error('Error fetching listing information:', error);
-        // Handle error if needed
       }
     };
   
@@ -66,7 +60,7 @@ function UpdateListingInfo() {
     formData.append('description', listing.description);
     formData.append('location', listing.location);
 
-    await handleSubmit(id, formData, file, listing, setFile, setPreviewSrc, navigate); // Submit the form data
+    await handleSubmit(id, formData, file, listing, setFile, setPreviewSrc, navigate);
   };
 
   return (

@@ -8,7 +8,6 @@ const deleteRoutes = require('./routes/deleteRoutes');
 const listingRoutes = require('./routes/listingRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 require('./config/db');
-const { Listing } = require('./model/listingModel');
 const cloudinary = require('cloudinary').v2;
 const asyncHandler = require('./middleware/asyncHandler'); 
 
@@ -45,18 +44,6 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('Connected to MongoDB');
 });
-app.put('/listings/:id', asyncHandler(async (req, res) => {
-  const id = req.params.id;
-  const { title, description, location, cloudinaryUrl, imagePublicId } = req.body;
-
-  const updatedData = req.body;
-
-  const updatedListing = await Listing.findByIdAndUpdate(id, updatedData, { new: true });
-  res.json(updatedListing);
-}));
-
-
-
 
 const port = process.env.PORT || 3030;
 app.listen(port, () => {
