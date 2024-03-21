@@ -35,6 +35,7 @@ function UpdateListingInfo() {
   
     fetchData();
   }, [id]);
+  
   const onDrop = (acceptedFiles) => {
     const currentFile = acceptedFiles[0];
     setFile(currentFile);
@@ -123,7 +124,7 @@ function UpdateListingInfo() {
             </div>
             <button
               type='submit'
-              className='btn button button--orange btn-lg btn-block float-end mt-4 float-right'
+              className='btn button button--orange btn-lg btn-block float-end mt-4'
             >
               Update Listing
             </button>

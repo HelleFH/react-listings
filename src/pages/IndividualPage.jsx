@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { fetchCombinedListings, handleDeleteListing as deleteListingFromStore } from '../store/appStore'; 
+import { fetchMongoDBListings, handleDeleteListing as deleteListingFromStore } from '../store/appStore'; 
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import ListingCard from '../components/ListingCard';
 
 const IndividualPage = () => {
-  const [combinedListings, setCombinedListings] = useState([]);
   const [singleListing, setSingleListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -14,8 +13,14 @@ const IndividualPage = () => {
   const navigate = useNavigate();
 
   const getSingleListing = async () => {
-    await fetchCombinedListings(setCombinedListings, setError);
-    setLoading(false);
+    try {
+      const listings = await fetchMongoDBListings();
+      setSingleListing(listings.find(listing => listing._id === id));
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching single listing:', error);
+      setError('Error fetching listing. Please try again.');
+    }
   };
 
   const closeDeleteModal = () => {
@@ -23,7 +28,13 @@ const IndividualPage = () => {
   };
 
   const handleDeleteListing = async () => {
-    await deleteListingFromStore(singleListing._id, setCombinedListings, () => navigate('/'), setShowDeleteModal); 
+    try {
+      await deleteListingFromStore(singleListing._id);
+      navigate('/');
+    } catch (error) {
+      console.error('Error deleting listing:', error);
+      // Handle error
+    }
     closeDeleteModal();
   };
 
@@ -32,12 +43,6 @@ const IndividualPage = () => {
       getSingleListing();
     }
   }, [id]);
-
-  useEffect(() => {
-    if (combinedListings.length > 0 && id) {
-      setSingleListing(combinedListings.find((listing) => listing._id === id));
-    }
-  }, [combinedListings, id]);
 
   return (
     <div className="container mt-5">
@@ -58,7 +63,7 @@ const IndividualPage = () => {
               />
             </div>
           ) : (
-            <div className="text-center">No Items </div>
+            <div className="text-center">{error || 'No Items'}</div>
           )}
         </div>
       </div>

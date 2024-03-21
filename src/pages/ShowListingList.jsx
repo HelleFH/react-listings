@@ -8,7 +8,7 @@ import { truncateDescription } from '../store/appStore';
 import { handleDeleteListing } from '../store/appStore'; 
 
 function ShowListingList() {
-  const [combinedListings, setCombinedListings] = useState([]);
+  const [listings, setListings] = useState([]);
   const [error, setError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedListingId, setSelectedListingId] = useState(null);
@@ -18,12 +18,7 @@ function ShowListingList() {
       try {
         const response = await axios.get(`${API_URL}/listings`);
         const mongodbListings = response.data;
-
-        const localListings = require('../data/localListings.json');
-
-        // Combine MongoDB and local listings from data.json file
-        setCombinedListings([...mongodbListings, ...localListings]);
-
+        setListings(mongodbListings);
         setError(null);
       } catch (error) {
         console.log('Error fetching listings:', error);
@@ -49,7 +44,7 @@ function ShowListingList() {
   };
 
   const renderCards = () => {
-    return combinedListings.map((listing, index) => (
+    return listings.map((listing, index) => (
       <div key={listing.cloudinaryUrl ? `listing-${listing._id}` : `local-listing-${index}`} className='listing-card-container'>
         {listing.cloudinaryUrl ? (
           <ListingCard listing={{
@@ -81,13 +76,12 @@ function ShowListingList() {
         )}
       </div>
       <DeleteConfirmationModal
-  isOpen={showDeleteModal}
-  onCancel={closeDeleteModal}
-  onConfirm={() => {
-    handleDeleteListing(selectedListingId, setCombinedListings, setShowDeleteModal); 
-  }}
-/>
-
+        isOpen={showDeleteModal}
+        onCancel={closeDeleteModal}
+        onConfirm={() => {
+          handleDeleteListing(selectedListingId, setListings, setShowDeleteModal); 
+        }}
+      />
     </div>
   );
 }

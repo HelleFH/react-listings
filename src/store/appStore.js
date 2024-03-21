@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { API_URL } from '../utils/constants';
-import localListings from '../data/localListings.json';
-
 
 export const fetchListingInfo = async (id) => {
   try {
@@ -10,6 +8,15 @@ export const fetchListingInfo = async (id) => {
   } catch (error) {
     console.error('Error fetching listing information:', error);
     return null; 
+  }
+};
+export const fetchMongoDBListings = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/listings`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching MongoDB listings:', error);
+    throw error;
   }
 };
 
@@ -21,19 +28,6 @@ export const truncateDescription = (description, wordCount) => {
 
 export const onChange = (e, listing, setListing) => {
   setListing({ ...listing, [e.target.name]: e.target.value });
-};
-
-export const fetchCombinedListings = async (setCombinedListings, setError) => {
-  try {
-    const response = await axios.get(`${API_URL}/listings`);
-    const mongodbListings = response.data;
-  
-    setCombinedListings([...mongodbListings, ...localListings]);
-    setError(null); 
-  } catch (error) {
-    console.log('Error fetching listings:', error);
-    setError('Error fetching listings. Please try again.');
-  }
 };
 
 export const uploadListing = async (file, listing, setFile, setPreviewSrc, setIsPreviewAvailable, navigate, setErrorMsg) => {
@@ -102,7 +96,7 @@ export const handleSubmit = async (id, formData, file, listing, setFile, setPrev
     }
 
     if (oldListingId) {
-      await handleDeleteListing(oldListingId);
+      await deleteListing(oldListingId);
     }
 
     navigate('/');
@@ -138,9 +132,6 @@ export const handleDeleteListing = async (listingId, setCombinedListings, setSho
     // Delete the listing on the server
     await axios.delete(`${API_URL}/listings/${listingId}`);
 
-    // Update combinedListings state by removing the deleted listing
-    setCombinedListings((prevListings) => prevListings.filter(listing => listing._id !== listingId));
-console.log ({setCombinedListings})
     setShowDeleteModal(false);
 
     console.log('Listing deleted successfully');

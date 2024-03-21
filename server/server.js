@@ -1,16 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 require('dotenv').config();
 const deleteRoutes = require('./routes/deleteRoutes');
 const listingRoutes = require('./routes/listingRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
-require('./config/db');
+const connectDB = require('./config/db')
 const cloudinary = require('cloudinary').v2;
-const asyncHandler = require('./middleware/asyncHandler'); 
-
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -33,17 +29,7 @@ app.use(deleteRoutes);
 app.use(listingRoutes);
 app.use(uploadRoutes);
 
-mongoose.connect(process.env.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-});
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
+connectDB();
 
 const port = process.env.PORT || 3030;
 app.listen(port, () => {

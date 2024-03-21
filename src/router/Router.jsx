@@ -6,7 +6,6 @@ import UpdateListingInfo from '../pages/updateListing';
 import DetailPage from '../pages/IndividualPage';
 import Header from '../components/Header'; 
 
-
 const AppRouter = () => (
   <Router>
     <Header />
