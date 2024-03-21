@@ -4,20 +4,20 @@
     "title": "Tropical Paradise Villa  ",
     "description": "(this listing can't be deleted or edited!!!) Escape to a luxurious villa in the heart of Bora Bora, surrounded by the tranquil beauty of turquoise waters and pristine white sandy beaches. This tropical paradise offers the perfect retreat, complete with palm trees swaying in the gentle breeze and breathtaking sunsets over the Pacific Ocean.",
     "location": "Bora Bora, French Polynesia",
-    "cloudinaryUrl": "https://res.cloudinary.com/dvagswjsf/image/upload/v1709890371/um6fmrwh4fk1mn9ibchl.png"
+    "cloudinaryUrl": "https://res.cloudinary.com/dvagswjsf/image/upload/v1711020489/borabora_lvgnnp.png"
   },
   {
     "_id": "2",
     "title": "Historic Landmark Apartment ",
     "description": "(this listing can't be deleted or edited!!!) Immerse yourself in the rich history of New York City with a stay in this elegant apartment located in a historic landmark building. Enjoy the charm of classic architecture combined with modern amenities, all while taking in the stunning views of the iconic city skyline and landmarks.",
     "location": "New York City, USA",
-    "cloudinaryUrl": "https://res.cloudinary.com/dvagswjsf/image/upload/v1709890371/irsr6hhtxgwxmipqclyg.png"
+    "cloudinaryUrl": "https://res.cloudinary.com/dvagswjsf/image/upload/v1711020489/newyork_llhhwa.png"
   },
   {
     "_id": "3",
     "title": "Mountain Retreat Cabin ",
     "description": "(this listing can't be deleted or edited!!!) Experience the serenity of the Canadian Rockies with a stay in this cozy mountain retreat cabin. Nestled in the heart of Banff, surrounded by towering peaks and lush pine forests, this cabin offers a perfect escape for nature lovers seeking peace and tranquility.",
     "location": "Banff, Canada",
-    "cloudinaryUrl": "https://res.cloudinary.com/dvagswjsf/image/upload/v1709890371/vcvhoctusntf8w114ym9.png"
+    "cloudinaryUrl": "https://res.cloudinary.com/dvagswjsf/image/upload/v1711020490/banff_whvhn2.png"
   }
 ]
