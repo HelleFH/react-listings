@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import ImageUpload from '../components/imageUpload';
-import { uploadListing } from '../store/appStore';
+import { createListing } from '../store/appStore';
 
 const CreateListingWithFileUpload = () => {
   const [file, setFile] = useState(null);
@@ -32,7 +32,7 @@ const CreateListingWithFileUpload = () => {
 
   const handleListingSubmit = (e) => {
     e.preventDefault();
-    uploadListing(file, listing, setFile, setPreviewSrc, setIsPreviewAvailable, navigate, setErrorMsg);
+    createListing(file, listing, setFile, setPreviewSrc, setIsPreviewAvailable, navigate, setErrorMsg);
   };
 
   const handleInputChange = (event) => {

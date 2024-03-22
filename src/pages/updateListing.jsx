@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import ImageUpload from '../components/imageUpload';
-import { fetchListingInfo, handleSubmit, onChange, } from '../store/appStore'; 
+import { fetchListingInfo, handleSubmitUpdate, onChange, } from '../store/appStore'; 
 
 function UpdateListingInfo() {
   const dropRef = useRef();
@@ -61,7 +61,7 @@ function UpdateListingInfo() {
     formData.append('description', listing.description);
     formData.append('location', listing.location);
 
-    await handleSubmit(id, formData, file, listing, setFile, setPreviewSrc, navigate);
+    await handleSubmitUpdate(id, formData, file, listing, setFile, setPreviewSrc, navigate);
   };
 
   return (

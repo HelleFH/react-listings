@@ -1,36 +1,44 @@
 import axios from 'axios';
-import { API_URL } from '../utils/constants';
 
+// Define the API URL from environment variables
+const API_URL = process.env.REACT_APP_API_URL;
+
+// Function to fetch information about a single listing
 export const fetchListingInfo = async (id) => {
   try {
+    // Send GET request to fetch listing info
     const response = await axios.get(`${API_URL}/listings/${id}`);
-    return response.data; 
+    return response.data; // Return the data if successful
   } catch (error) {
-    console.error('Error fetching listing information:', error);
-    return null; 
-  }
-};
-export const fetchMongoDBListings = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/listings`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching MongoDB listings:', error);
-    throw error;
+    throw error; // Throw the error for the caller to handle
   }
 };
 
+// Function to fetch listings from MongoDB
+export const fetchMongoDBListings = async () => {
+  try {
+    // Send GET request to fetch listings
+    const response = await axios.get(`${API_URL}/listings`);
+    return response.data; // Return the data if successful
+  } catch (error) {
+    throw error; // Throw the error for the caller to handle
+  }
+};
+
+// Function to truncate description of a listing
 export const truncateDescription = (description, wordCount) => {
   const words = description.split(' ');
   const truncatedWords = words.slice(0, wordCount);
   return truncatedWords.join(' ') + (words.length > wordCount ? '...' : '');
 };
 
+// Function to handle input change event
 export const onChange = (e, listing, setListing) => {
   setListing({ ...listing, [e.target.name]: e.target.value });
 };
 
-export const uploadListing = async (file, listing, setFile, setPreviewSrc, setIsPreviewAvailable, navigate, setErrorMsg) => {
+// Function to create a new listing
+export const createListing = async (file, listing, setFile, setPreviewSrc, setIsPreviewAvailable, navigate, setErrorMsg) => {
   try {
     if (!file) {
       setErrorMsg('Please select a file to add.');
@@ -43,37 +51,38 @@ export const uploadListing = async (file, listing, setFile, setPreviewSrc, setIs
     formData.append('description', listing.description);
     formData.append('location', listing.location);
 
+    // Send POST request to create new listing
     await axios.post(`${API_URL}/upload`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
 
+    // Reset form state and navigate to home page
     setFile(null);
     setPreviewSrc('');
     setIsPreviewAvailable(false);
     navigate('/');
   } catch (error) {
-    console.error('Error in form submission:', error);
-    setErrorMsg('Error submitting the form. Please try again.');
+    throw error; // Throw the error for the caller to handle
   }
 };
 
-export const handleSubmit = async (id, formData, file, listing, setFile, setPreviewSrc, navigate) => {
+// Function to handle submission of updated listing
+export const handleSubmitUpdate = async (id, formData, file, listing, setFile, setPreviewSrc, navigate) => {
   try {
     let oldListingId;
     let uploadResponse; 
 
     if (file && listing.cloudinaryUrl) {
-      const publicIdToDelete = listing.cloudinaryUrl.split('/').pop().split('.')[0];
-      await deleteCloudinaryImage(publicIdToDelete);
-
+      // If there's a new file, upload it first
       uploadResponse = await axios.post(`${API_URL}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
+      // Prepare data for updating the listing
       const data = {
         title: listing.title,
         description: listing.description,
@@ -81,10 +90,16 @@ export const handleSubmit = async (id, formData, file, listing, setFile, setPrev
         cloudinaryUrl: uploadResponse.data.cloudinaryUrl,
       };
 
+      // Send PUT request to update the listing
       const updateResponse = await axios.put(`${API_URL}/listings/${id}`, data);
 
       oldListingId = id;
+
+      // Delete the old listing
+      await handleDeleteListing(oldListingId);
+
     } else {
+      // Prepare data for updating the listing
       const data = {
         title: listing.title,
         description: listing.description,
@@ -92,50 +107,32 @@ export const handleSubmit = async (id, formData, file, listing, setFile, setPrev
         cloudinaryUrl: listing.cloudinaryUrl,
       };
 
+      // Send PUT request to update the listing
       const updateResponse = await axios.put(`${API_URL}/listings/${id}`, data);
     }
 
-    if (oldListingId) {
-      await deleteListing(oldListingId);
-    }
-
+    // Navigate to home page after successful update
     navigate('/');
   } catch (error) {
-    console.error('Error updating or deleting listing:', error);
+    throw error; // Throw the error for the caller to handle
   }
 };
 
-export const deleteCloudinaryImage = async (publicIdToDelete) => {
+// Function to handle deletion of a listing
+export const handleDeleteListing = async (listingId, setListings, setShowDeleteModal) => {
   try {
-    if (publicIdToDelete) {
-      const response = await axios.delete(`${API_URL}/delete-image/${publicIdToDelete}`);
-      console.log('Cloudinary image deletion response:', response.data);
-    }
-  } catch (error) {
-    console.error('Error deleting image from Cloudinary:', error);
-  }
-};
-
-export const deleteListing = async (listingId) => {
-  try {
-    const response = await axios.delete(`${API_URL}/listings/${listingId}`);
-    console.log('Listing deleted successfully:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error deleting listing:', error);
-    throw error;
-  }
-};
-
-export const handleDeleteListing = async (listingId, setCombinedListings, setShowDeleteModal) => {
-  try {
-    // Delete the listing on the server
+    // Send DELETE request to delete the listing
     await axios.delete(`${API_URL}/listings/${listingId}`);
-
+    
+    // Refetch listings and update state
+    const response = await axios.get(`${API_URL}/listings`);
+    setListings(response.data);
+    
+    // Hide the delete modal
     setShowDeleteModal(false);
-
+    
     console.log('Listing deleted successfully');
   } catch (error) {
-    console.error('Error deleting listing:', error);
+    throw error; // Throw the error for the caller to handle
   }
 };
