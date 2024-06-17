@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CreateListingWithFileUpload from '../pages/createListing';
-import ShowListingList from '../pages/showListingList';
+import ShowListingList from '../pages/showListingList'
 import UpdateListingInfo from '../pages/updateListing';
 import IndividualPage from '../pages/individualPage'; 
 import Navbar from '../components/Navbar';

@@ -24,10 +24,10 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`} id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0 w-50 "  style={{ position: 'absolute', backgroundColor: '#ffc107', width: '100%', top: '100%', paddingLeft:'1em', left:'0', zIndex: 1000 }}>
+          <ul className={`navbar-nav me-auto mb-2 mb-lg-0 w-100 ${isOpen ? 'position-absolute' : ''}`} style={{ backgroundColor: '#ffc107', paddingLeft: '1em', zIndex: 1000 }}>
             <li className="nav-item">
-              <a className="nav-link  active" aria-current="page" href="/" onClick={() => navigate("/")} style={{ color: '#000000', fontSize: '1.25rem' }}>
-                <h5 >Home</h5>
+              <a className="nav-link active" aria-current="page" href="/" onClick={() => navigate("/")} style={{ color: '#000000', fontSize: '1.25rem' }}>
+                <h5>Home</h5>
               </a>
             </li>
             <li className="nav-item">
