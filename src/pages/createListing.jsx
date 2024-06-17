@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import ImageUpload from '../components/imageUpload';
-import { createListing } from '../store/appStore';
-
+import axios from 'axios';
 const CreateListingWithFileUpload = () => {
   const [file, setFile] = useState(null);
   const [previewSrc, setPreviewSrc] = useState('');
   const [isPreviewAvailable, setIsPreviewAvailable] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
+
+  const API_URL = process.env.REACT_APP_API_URL;
+
 
   const [listing, setListing] = useState({
     title: '',
@@ -30,9 +31,42 @@ const CreateListingWithFileUpload = () => {
     setIsPreviewAvailable(uploadedFile.name.match(/\.(jpeg|jpg|png)$/));
   };
 
-  const handleListingSubmit = (e) => {
+  const createListing = async (file, listing, setFile, setPreviewSrc, setIsPreviewAvailable, navigate, setErrorMsg) => {
+    try {
+      const formData = new FormData();
+      
+      // Conditionally append the file if it exists
+      if (file) {
+        formData.append('file', file);
+      }
+      
+      formData.append('title', listing.title);
+      formData.append('description', listing.description);
+      formData.append('location', listing.location);
+  
+      await axios.post(`${API_URL}/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      setFile(null);
+      setPreviewSrc('');
+      setIsPreviewAvailable(false);
+      navigate('/');
+    } catch (error) {
+      setErrorMsg(error.message); // Set the error message to display it in the UI
+      console.error('Error creating listing:', error); // Log the error to the console for debugging
+    }
+  };
+
+  const handleListingSubmit = async (e) => {
     e.preventDefault();
-    createListing(file, listing, setFile, setPreviewSrc, setIsPreviewAvailable, navigate, setErrorMsg);
+    try {
+      await createListing(file, listing, setFile, setPreviewSrc, setIsPreviewAvailable, navigate, setErrorMsg);
+    } catch (error) {
+      setErrorMsg('Failed to create listing. Please try again later.');
+    }
   };
 
   const handleInputChange = (event) => {
@@ -58,7 +92,6 @@ const CreateListingWithFileUpload = () => {
           isPreviewAvailable={isPreviewAvailable}
         />
         <div className='form-container'>
-          {/* Listing form inputs */}
           <div className="form-group">
             <input
               type="text"
@@ -67,17 +100,18 @@ const CreateListingWithFileUpload = () => {
               className="form-control"
               value={listing.title}
               onChange={handleInputChange}
+              required
             />
           </div>
           <div className="form-group">
             <textarea
-              type="text"
               placeholder="Description"
               name="description"
               className="form-control"
               value={listing.description}
               onChange={handleInputChange}
               style={{ height: '150px', verticalAlign: 'top' }}
+              required
             />
           </div>
           <div className="form-group">
@@ -88,6 +122,7 @@ const CreateListingWithFileUpload = () => {
               className="form-control"
               value={listing.location}
               onChange={handleInputChange}
+              required
             />
           </div>
         </div>

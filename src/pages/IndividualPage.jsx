@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { fetchMongoDBListings, handleDeleteListing as deleteListingFromStore } from '../store/appStore'; 
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import ListingCard from '../components/ListingCard';
+import { handleDeleteListing } from '../components/handleDeleteListing';
+import axios from 'axios';
 
 const IndividualPage = () => {
   const [singleListing, setSingleListing] = useState(null);
@@ -11,6 +12,18 @@ const IndividualPage = () => {
   const [error, setError] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const API_URL = process.env.REACT_APP_API_URL;
+
+   const fetchMongoDBListings = async () => {
+    try {
+      // Send GET request to fetch listings
+      const response = await axios.get(`${API_URL}/listings`);
+      return response.data; // Return the data if successful
+    } catch (error) {
+      throw error; // Throw the error for the caller to handle
+    }
+  };
 
   const getSingleListing = async () => {
     try {
@@ -27,22 +40,6 @@ const IndividualPage = () => {
     setShowDeleteModal(false);
   };
 
-  const handleDeleteListing = async () => {
-    try {
-      await deleteListingFromStore(singleListing._id);
-      navigate('/');
-    } catch (error) {
-      console.error('Error deleting listing:', error);
-      // Handle error
-    }
-    closeDeleteModal();
-  };
-
-  useEffect(() => {
-    if (id) {
-      getSingleListing();
-    }
-  }, [id]);
 
   return (
     <div className="container mt-5">

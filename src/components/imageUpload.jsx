@@ -12,6 +12,7 @@ const ImageUpload = ({ onDrop, file, previewSrc, isPreviewAvailable }) => {
     event.preventDefault();
     event.stopPropagation();
   };
+  
 
   const handleDrop = (event) => {
     event.preventDefault();
@@ -19,6 +20,7 @@ const ImageUpload = ({ onDrop, file, previewSrc, isPreviewAvailable }) => {
     const droppedFile = event.dataTransfer.files[0];
     onDrop([droppedFile]);
   };
+  
   ImageUpload.propTypes = {
     onDrop: PropTypes.func.isRequired,
     file: PropTypes.object,

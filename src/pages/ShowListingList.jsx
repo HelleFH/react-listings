@@ -3,8 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import ListingCard from '../components/ListingCard';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
-import { truncateDescription } from '../store/appStore';
-import { handleDeleteListing } from '../store/appStore'; 
+import { handleDeleteListing } from '../components/handleDeleteListing'; 
 
 // Define the API URL from environment variables
 const API_URL = process.env.REACT_APP_API_URL;
@@ -51,6 +50,13 @@ function ShowListingList() {
     setSelectedListingId(null);
     setShowDeleteModal(false);
   };
+
+  // Function to truncate description of a listing
+ const truncateDescription = (description, wordCount) => {
+  const words = description.split(' ');
+  const truncatedWords = words.slice(0, wordCount);
+  return truncatedWords.join(' ') + (words.length > wordCount ? '...' : '');
+};
 
   // Function to render listing cards
   const renderCards = () => {

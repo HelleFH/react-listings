@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CreateListingWithFileUpload from '../pages/createListing';
-import ShowListingList from '../pages/ShowListingList';
+import ShowListingList from '../pages/showListingList';
 import UpdateListingInfo from '../pages/updateListing';
-import DetailPage from '../pages/IndividualPage';
+import DetailPage from '../pages/individualPage';
 import Header from '../components/Header'; 
 
 const AppRouter = () => (
