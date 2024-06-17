@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import ListingCard from '../components/ListingCard';
 import { handleDeleteListing } from '../components/handleDeleteListing';
@@ -11,17 +11,16 @@ const IndividualPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [error, setError] = useState(null);
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const API_URL = process.env.REACT_APP_API_URL;
 
    const fetchMongoDBListings = async () => {
     try {
-      // Send GET request to fetch listings
+
       const response = await axios.get(`${API_URL}/listings`);
-      return response.data; // Return the data if successful
+      return response.data; 
     } catch (error) {
-      throw error; // Throw the error for the caller to handle
+      throw error; 
     }
   };
 
@@ -39,7 +38,11 @@ const IndividualPage = () => {
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
   };
-
+  useEffect(() => {
+    if (id) {
+      getSingleListing();
+    }
+  }, [id]);
 
   return (
     <div className="container mt-5">

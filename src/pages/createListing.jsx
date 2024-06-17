@@ -3,6 +3,8 @@ import { Form } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
 import ImageUpload from '../components/imageUpload';
 import axios from 'axios';
+
+
 const CreateListingWithFileUpload = () => {
   const [file, setFile] = useState(null);
   const [previewSrc, setPreviewSrc] = useState('');

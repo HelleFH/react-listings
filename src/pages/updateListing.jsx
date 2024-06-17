@@ -14,11 +14,11 @@ function UpdateListingInfo() {
 
    const fetchListingInfo = async (id) => {
     try {
-      // Send GET request to fetch listing info
+
       const response = await axios.get(`${API_URL}/listings/${id}`);
-      return response.data; // Return the data if successful
+      return response.data;
     } catch (error) {
-      throw error; // Throw the error for the caller to handle
+      throw error; 
     }
   };
 
@@ -43,14 +43,12 @@ function UpdateListingInfo() {
       let uploadResponse; 
   
       if (file && listing.cloudinaryUrl) {
-        // If there's a new file, upload it first
         uploadResponse = await axios.post(`${API_URL}/upload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
   
-        // Prepare data for updating the listing
         const data = {
           title: listing.title,
           description: listing.description,
@@ -58,16 +56,13 @@ function UpdateListingInfo() {
           cloudinaryUrl: uploadResponse.data.cloudinaryUrl,
         };
   
-        // Send PUT request to update the listing
         const updateResponse = await axios.put(`${API_URL}/listings/${id}`, data);
   
         oldListingId = id;
   
-        // Delete the old listing
         await handleDeleteListing(oldListingId);
   
       } else {
-        // Prepare data for updating the listing
         const data = {
           title: listing.title,
           description: listing.description,
@@ -75,14 +70,12 @@ function UpdateListingInfo() {
           cloudinaryUrl: listing.cloudinaryUrl,
         };
   
-        // Send PUT request to update the listing
         const updateResponse = await axios.put(`${API_URL}/listings/${id}`, data);
       }
   
-      // Navigate to home page after successful update
       navigate('/');
     } catch (error) {
-      throw error; // Throw the error for the caller to handle
+      throw error; 
     }
   };
   
@@ -91,8 +84,8 @@ function UpdateListingInfo() {
       try {
         const data = await fetchListingInfo(id);
         if (data) {
-          setListing(data); // Update the listing state with the fetched data
-          setPreviewSrc(data.cloudinaryUrl); // Set the preview source with the fetched cloudinaryUrl
+          setListing(data); 
+          setPreviewSrc(data.cloudinaryUrl); 
         } else {
           console.error('Listing data is undefined');
         }
@@ -117,7 +110,7 @@ function UpdateListingInfo() {
   };
 
   const handleChange = (e) => {
-    onChange(e, listing, setListing); // Handle change in input fields
+    onChange(e, listing, setListing);
   };
 
   const handleSubmitForm = async (e) => {

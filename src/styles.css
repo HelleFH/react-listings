@@ -1,6 +1,8 @@
 /* Reset and global styles */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap');
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 * {
   margin: 0;
   padding: 0;
@@ -11,6 +13,7 @@ body {
   background-color: #2c3e50;
   color: #ffc107;
 }
+
 
 /* Individual listing container styles */
 .individual-listing-container .card-description {
@@ -64,6 +67,7 @@ p {
   color: black;
 
 }
+
 
 .button--blue:hover {
   background-color: #384f66;
