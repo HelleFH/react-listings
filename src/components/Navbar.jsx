@@ -30,10 +30,11 @@ const Navbar = () => {
                 paddingLeft: '1em', 
                 zIndex: 1000,
                 position: 'absolute',
-                left: isOpen ? 0 : '-100%'
+                position: isOpen ? 'absolute' : 'relative',
+                left: isOpen ? 0 : 'auto'
               }}
           >
-            <li className="nav-item">
+            <li className="nav-item z-index-9999">
               <a className="nav-link active" aria-current="page" href="/" onClick={() => navigate("/")} style={{ color: '#000000', fontSize: '1.25rem' }}>
                 <h5>Home</h5>
               </a>
