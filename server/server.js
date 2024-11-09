@@ -17,7 +17,7 @@ cloudinary.config({
 const app = express();
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://react-listings-frontend.onrender.com'],
+  origin: ['http://localhost:3000', 'https://react-listings-1.onrender.com/'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204,
